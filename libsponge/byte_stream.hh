@@ -2,7 +2,6 @@
 #define SPONGE_LIBSPONGE_BYTE_STREAM_HH
 
 #include <iostream>
-#include <queue>
 #include <string>
 #include <vector>
 
@@ -12,7 +11,7 @@
 //! side.  The byte stream is finite: the writer can end the input,
 //! and then no more bytes can be written.
 class ByteStream {
-   private:
+  private:
     // Your code here -- add private members as necessary.
 
     // Hint: This doesn't need to be a sophisticated data structure at
@@ -27,7 +26,7 @@ class ByteStream {
     void push(char c);
     char pop_front();
 
-   public:
+  public:
     //! Construct a stream with room for `capacity` bytes.
     ByteStream(const size_t capacity);
 

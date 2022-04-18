@@ -8,7 +8,7 @@
 // You will need to add private members to the class declaration in `byte_stream.hh`
 
 template <typename... Targs>
-void DUMMY_CODE(Targs &&.../* unused */) {}
+void DUMMY_CODE(Targs &&... /* unused */) {}
 
 using namespace std;
 
@@ -34,7 +34,8 @@ char ByteStream::pop_front() {
 }
 
 size_t ByteStream::write(const string &data) {
-    if (end_input_) return 0;
+    if (end_input_)
+        return 0;
     size_t t = min(remaining_capacity(), data.size());
     for (size_t i = 0; i < t; ++i) {
         push(data[i]);
@@ -73,34 +74,18 @@ std::string ByteStream::read(const size_t len) {
     return str;
 }
 
-void ByteStream::end_input() {
-    end_input_ = true;
-}
+void ByteStream::end_input() { end_input_ = true; }
 
-bool ByteStream::input_ended() const {
-    return end_input_;
-}
+bool ByteStream::input_ended() const { return end_input_; }
 
-size_t ByteStream::buffer_size() const {
-    return (tail_ - head_ + size_) % size_;
-}
+size_t ByteStream::buffer_size() const { return (tail_ - head_ + size_) % size_; }
 
-bool ByteStream::buffer_empty() const {
-    return tail_ == head_;
-}
+bool ByteStream::buffer_empty() const { return tail_ == head_; }
 
-bool ByteStream::eof() const {
-    return end_input_ && buffer_empty();
-}
+bool ByteStream::eof() const { return end_input_ && buffer_empty(); }
 
-size_t ByteStream::bytes_written() const {
-    return cnt_write_;
-}
+size_t ByteStream::bytes_written() const { return cnt_write_; }
 
-size_t ByteStream::bytes_read() const {
-    return cnt_read_;
-}
+size_t ByteStream::bytes_read() const { return cnt_read_; }
 
-size_t ByteStream::remaining_capacity() const {
-    return cap_ - buffer_size();
-}
+size_t ByteStream::remaining_capacity() const { return cap_ - buffer_size(); }
