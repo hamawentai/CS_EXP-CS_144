@@ -25,7 +25,7 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
     }
     insert_map(data, index);
     // key
-    if (index <= _exp_index && index  + data.size() >= _exp_index) {
+    if (index <= _exp_index && index + data.size() >= _exp_index) {
         merge_interval(_exp_index);
     }
 }
@@ -75,13 +75,12 @@ size_t StreamReassembler::unassembled_bytes() const {
     size_t exp = 0, cnt = 0;
     for (auto x : _un_reassemb_bf) {
         size_t new_exp = x.first + x.second.size();
-        if (cnt == 0) {
-            exp = new_exp;
+        if (x.first >= exp) {
             cnt += x.second.size();
         } else if (new_exp > exp) {
             cnt += (new_exp - exp);
-            exp = new_exp;
         }
+        exp = new_exp;
     }
     return cnt;
 }

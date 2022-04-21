@@ -50,6 +50,9 @@ class StreamReassembler {
     //! \brief Is the internal state empty (other than the output stream)?
     //! \returns `true` if no substrings are waiting to be assembled
     bool empty() const;
+    size_t get_exp_index() {
+        return _exp_index;
+    }
 
    private:
     void insert_map(const std::string &, const size_t);
