@@ -19,7 +19,7 @@ static constexpr uint64_t kI32 = (1ul << 32);
 //! \brief abs_seqno -> abs_seqnoseqno
 WrappingInt32 wrap(uint64_t n, WrappingInt32 isn) {
     DUMMY_CODE(n, isn);
-    return WrappingInt32((n + isn.raw_value()) % kI32);
+    return WrappingInt32(n + isn.raw_value());
 }
 
 //! Transform a WrappingInt32 into an "absolute" 64-bit sequence number (zero-indexed)
