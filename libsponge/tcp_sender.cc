@@ -32,7 +32,6 @@ void TCPSender::fill_window() {
         }
         // win_size - 1 >= _unconfirmed_size
         size_t payload_size = min(TCPConfig::MAX_PAYLOAD_SIZE, win_size - _unconfirmed_size - tcp_segment.header().syn);
-        // cout << "win_size-> " << win_size << " pay_size-> " << payload_size << endl;
         tcp_segment.payload() = Buffer(_stream.read(payload_size));
         tcp_segment.header().seqno = next_seqno();
         // 设置fin
