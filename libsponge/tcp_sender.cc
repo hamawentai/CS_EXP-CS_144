@@ -90,7 +90,7 @@ void TCPSender::tick(const size_t ms_since_last_tick) {
     _timer.run(ms_since_last_tick);
     // 超时->计数器当前时间重置
     if (_timer.is_expired()) {
-        // 窗口仍有剩余但发生了拥塞->指数避让
+        // 发生了拥塞->指数避让
         if (_win_size != 0) {
             _timer.exponential_backoff();
         }
