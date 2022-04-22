@@ -1,13 +1,37 @@
 #ifndef SPONGE_LIBSPONGE_TCP_SENDER_HH
 #define SPONGE_LIBSPONGE_TCP_SENDER_HH
 
+#include <functional>
+#include <queue>
+
 #include "byte_stream.hh"
 #include "tcp_config.hh"
 #include "tcp_segment.hh"
 #include "wrapping_integers.hh"
 
-#include <functional>
-#include <queue>
+class TCPTimer {
+   private:
+    size_t _time_count, RTO;
+
+   public:
+    TCPTimer(size_t rto) : _time_count(0), RTO(rto) {}
+    void start() {
+        _time_count = 0;
+    }
+    void run(const size_t elapsed_time) {
+        _time_count += elapsed_time;
+    }
+    bool is_expired() {
+        return _time_count >= RTO;
+    }
+    void reset(size_t rto) {
+        RTO = rto;
+        _time_count = 0;
+    }
+    void exponential_backoff() {
+        RTO *= 2;
+    }
+};
 
 //! \brief The "sender" part of a TCP implementation.
 
@@ -16,7 +40,7 @@
 //! maintains the Retransmission Timer, and retransmits in-flight
 //! segments if the retransmission timer expires.
 class TCPSender {
-  private:
+   private:
     //! our initial sequence number, the number for our SYN.
     WrappingInt32 _isn;
 
@@ -31,8 +55,14 @@ class TCPSender {
 
     //! the (absolute) sequence number for the next byte to be sent
     uint64_t _next_seqno{0};
+    //! my code
+    uint64_t _win_size = 1;
+    uint64_t _unconfirmed_size = 0, _consecutive_retransmissions_cnt = 0;
+    std::queue<TCPSegment> _unconfirmed_queue{};
+    bool _send_syn = false, _send_fin = false;
+    TCPTimer _timer;
 
-  public:
+   public:
     //! Initialize a TCPSender
     TCPSender(const size_t capacity = TCPConfig::DEFAULT_CAPACITY,
               const uint16_t retx_timeout = TCPConfig::TIMEOUT_DFLT,
@@ -48,6 +78,7 @@ class TCPSender {
     //!@{
 
     //! \brief A new acknowledgment was received
+    // 累积确认
     void ack_received(const WrappingInt32 ackno, const uint16_t window_size);
 
     //! \brief Generate an empty-payload segment (useful for creating empty ACK segments)
@@ -57,6 +88,7 @@ class TCPSender {
     void fill_window();
 
     //! \brief Notifies the TCPSender of the passage of time
+    //
     void tick(const size_t ms_since_last_tick);
     //!@}
 

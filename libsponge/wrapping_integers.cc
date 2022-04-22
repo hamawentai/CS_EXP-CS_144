@@ -6,7 +6,7 @@
 // automated checks run by `make check_lab2`.
 
 template <typename... Targs>
-void DUMMY_CODE(Targs &&.../* unused */) {}
+void DUMMY_CODE(Targs &&... /* unused */) {}
 
 using namespace std;
 
@@ -40,7 +40,8 @@ uint64_t unwrap(WrappingInt32 n, WrappingInt32 isn, uint64_t checkpoint) {
     uint64_t seqno = n.raw_value();
     uint64_t offset = (seqno - isn.raw_value() + kI32) % kI32;
     uint64_t x = checkpoint / kI32;
-    if (x) x--;
+    if (x)
+        x--;
     uint64_t resp = 0, diff = kI32;
     for (int i = 0; i < 3; ++i) {
         uint64_t t = offset + x * kI32;

@@ -15,7 +15,7 @@ class StreamReassembler {
 
     ByteStream _output;  //!< The reassembled in-order byte stream
     size_t _capacity;    //!< The maximum number of bytes
-    size_t _exp_index = 0, _eof_index = 0, _un_reassemb_size=0;
+    size_t _exp_index = 0, _eof_index = 0, _un_reassemb_size = 0;
     bool _is_eof = false;
     std::map<size_t, std::string> _un_reassemb_bf{};
 
@@ -50,9 +50,7 @@ class StreamReassembler {
     //! \brief Is the internal state empty (other than the output stream)?
     //! \returns `true` if no substrings are waiting to be assembled
     bool empty() const;
-    size_t get_exp_index() {
-        return _exp_index;
-    }
+    size_t get_exp_index() { return _exp_index; }
 
    private:
     void insert_map(const std::string &, const size_t);
